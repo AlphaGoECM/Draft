@@ -39,6 +39,7 @@ class Board(Array):
         # Game history
         self._history = []
         self._redo = []
+        self._legal = []
 
     @property
     def turn(self):
@@ -68,7 +69,6 @@ class Board(Array):
         """
         Makes a move at the given location for the current turn's color.
         """
-        (x,y)=input('coordonnees : ')
         # Check if coordinates are occupied
         if self[x, y] is not self.EMPTY:
             raise BoardError('Cannot move on top of another piece!')
@@ -88,10 +88,20 @@ class Board(Array):
         # Check if move is redundant.  A redundant move is one that would
         # return the board to the state at the time of a player's last move.
         self._check_for_ko()
-
+        
+        #on regarde les coups légaux pour remplir l'état
+        self.get_legal_moves()
         self._flip_turn()
         self._redo = []
 
+    def get_legal_moves (self):
+        witdh = self._width
+        for x, y in [(x,y) for x in range(1,witdh) for y in range(1,witdh)]:
+            if self[x, y] is not self.EMPTY:
+                if not(self._check_for_suicide(x, y)):
+                    (self._legal).append([x,y])
+
+        
     def _check_for_suicide(self, x, y):
         """
         Checks if move is suicidal.

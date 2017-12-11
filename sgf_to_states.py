@@ -49,28 +49,7 @@ def moves_to_one_state(taille,moves,numero_du_coup):
             x=move[0]+1
             y=move[1]+1
 
-        # Check if coordinates are occupied
-            if self[x, y] is not self.EMPTY:
-                raise BoardError('Cannot move on top of another piece!')
-
-        # Store history and make move
-            self._push_history()
-            self[x, y] = self._turn
-
-        # Check if any pieces have been taken
-            taken = self._take_pieces(x, y)
-
-        # Check if move is suicidal.  A suicidal move is a move that takes no
-        # pieces and is played on a coordinate which has no liberties.
-            if taken == 0:
-                self._check_for_suicide(x, y)
-
-        # Check if move is redundant.  A redundant move is one that would
-        # return the board to the state at the time of a player's last move.
-            self._check_for_ko()
-
-            self._flip_turn()
-            self._redo = []
+            self.move(x,y)
         
         
     return self 

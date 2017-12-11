@@ -1,4 +1,4 @@
-from utils import bold
+#from utils import bold
 
 
 class LocationError(Exception):
@@ -7,8 +7,8 @@ class LocationError(Exception):
 
 class Location(object):
     TYPES = {
-        'black': bold('*'),
-        'white': bold('o'),
+        'black': '*', # bold('*'), (Mathias) j'ai enlevé bold, ça bugait pour rien
+        'white': 'o', # bold('o'),
         'empty': '.',
     }
 
