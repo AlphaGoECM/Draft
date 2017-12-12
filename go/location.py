@@ -7,8 +7,8 @@ class LocationError(Exception):
 
 class Location(object):
     TYPES = {
-        'black': '*', # bold('*'), (Mathias) j'ai enlevé bold, ça bugait pour rien
-        'white': 'o', # bold('o'),
+        'black': '*', # bold( ... ), (Mathias) j ai enleve bold, ça bugait pour rien
+        'white': 'o', # bold( o ),
         'empty': '.',
     }
 

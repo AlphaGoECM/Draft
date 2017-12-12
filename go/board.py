@@ -89,7 +89,7 @@ class Board(Array):
         # return the board to the state at the time of a player's last move.
         self._check_for_ko()
         
-        #on regarde les coups légaux pour remplir l'état
+        #on regarde les coups legaux pour remplir l etat
         self.get_legal_moves()
         self._flip_turn()
         self._redo = []
