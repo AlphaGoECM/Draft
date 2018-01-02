@@ -404,9 +404,9 @@ class GameState(object):
             self.current_player = -color
             self.history.append(action)
             self.__legal_move_cache = None
-        else:
-            self.current_player = reset_player
-            raise IllegalMove(str(action))
+        #else:
+            #self.current_player = reset_player
+            #raise IllegalMove(str(action))
         # Check for end of game
         if len(self.history) > 1:
             if self.history[-1] is PASS_MOVE and self.history[-2] is PASS_MOVE \
