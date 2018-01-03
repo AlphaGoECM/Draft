@@ -76,6 +76,44 @@ def sgf_to_gamestate(sgf_string):
     # sgf_iter_states returns
     return gs
 
+
+def sgf_iter_states_stop(sgf_string,stop ,include_end=True):
+    """Iterates over (GameState, move, player) tuples in the first game
+    of the given SGF file"""
+    i=0
+    collection = sgf.parse(sgf_string)
+    game = collection[0]
+    gs = _sgf_init_gamestate(game.root)
+    if game.rest is not None:
+        for node in game.rest:
+            i+=1
+            props = node.properties
+            if 'W' in props:
+                move = _parse_sgf_move(props['W'][0])
+                player = go.WHITE
+            elif 'B' in props:
+                move = _parse_sgf_move(props['B'][0])
+                player = go.BLACK
+            yield (gs, move, player)
+            # update state to n+1
+            gs.do_move(move, player)
+    if i==stop:
+        yield (gs, None, None)      
+    if include_end:
+        yield (gs, None, None)
+
+def sgf_to_gamestate_stop(sgf_string,stop):
+    """Creates a GameState object from the first game in the given collection
+    """
+    i=0
+    for (gs, move, player) in sgf_iter_states(sgf_string, True):
+        i+=1
+        if i==stop:
+            return gs
+        pass
+    # gs has been updated in-place to the final state by the time
+    # sgf_iter_states returns
+    return gs
 ##################################################################
 
 def save_gamestate_to_sgf(gamestate, path, filename, black_player_name='Unknown',
@@ -110,3 +148,5 @@ def save_gamestate_to_sgf(gamestate, path, filename, black_player_name='Unknown'
     str_list.append(')')
     with open(os.path.join(path, filename), "w") as f:
         f.write(''.join(str_list))
+        
+  
