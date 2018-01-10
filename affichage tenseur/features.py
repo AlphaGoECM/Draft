@@ -52,11 +52,11 @@ def turns_since_move(state, maximum=8):
 def get_liberties(state, maximum=8):
     planes = np.zeros((maximum, state.size, state.size))
     for i in range(maximum):
-        for x in range(state.size):
-            for y in range(state.size):
-                planes[i, x, y] = state.liberty_counts[x,y] == i
-                if state.liberty_counts[x,y] >= maximum:
-                    planes[maximum-1, x, y] = 1
+        # single liberties in plane zero (groups won't have zero), double
+        # liberties in plane one, etc
+        planes[i, state.liberty_counts == i + 1] = 1
+    # the "maximum-or-more" case on the backmost plane
+    planes[maximum - 1, state.liberty_counts >= maximum] = 1
     return planes
 
 def get_capture_size(state, maximum=8):
@@ -154,7 +154,7 @@ def get_liberties_after(state, maximum=8):
         # since it's clearly not a liberty after playing there
         if (x, y) in liberty_set_after:
             liberty_set_after.remove((x, y))
-        planes[min(maximum - 1, len(lib_set_after) - 1), x, y] = 1
+        planes[min(maximum - 1, len(liberty_set_after) - 1), x, y] = 1
     return planes
 
 def sensibleness(state):
